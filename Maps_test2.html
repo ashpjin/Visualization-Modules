@@ -18,30 +18,37 @@
     var redIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png");
     var greenIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png");
     var purpleIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/purple-dot.png");
-   
-    function getAverage(){
-        var latAvg = 0;
-        var longAvg = 0;
-        var goodCoords = 0;
-        for(var i = 0; i < latitudes.length; i++)
-        {
-           var tempLat = parseFloat(latitudes[i]);
-           var tempLong = parseFloat(longitudes[i]);
-           if(!isNaN(tempLat) && !isNaN(tempLong))
-           {
-              latAvg += parseFloat(latitudes[i]);
-              longAvg += parseFloat(longitudes[i]);
-              goodCoords++;
-           } 
-           //document.write(parseFloat(latitudes[i]) + ' ' + parseFloat(longitudes[i]) + '\n');
-        }  
-        //document.write(latAvg + ' ' + longAvg + '\n');                                     
-        latAvg /= goodCoords;
-        longAvg /= goodCoords;
-        //document.write(latAvg + ' ' + longAvg);
-        var center = new google.maps.LatLng(latAvg, longAvg, true);
-        return center;
-    }
+
+    var infowindow = new google.maps.InfoWindow();
+
+function getAverage(){
+    var latAvg = 0;
+    var longAvg = 0;
+    var goodCoords = 0;
+    for(var i = 0; i < latitudes.length; i++)
+    {
+       var tempLat = parseFloat(latitudes[i]);
+       var tempLong = parseFloat(longitudes[i]);
+       if(!isNaN(tempLat) && !isNaN(tempLong))
+       {
+          latAvg += parseFloat(latitudes[i]);
+          longAvg += parseFloat(longitudes[i]);
+          goodCoords++;
+       } 
+       //document.write(parseFloat(latitudes[i]) + ' ' + parseFloat(longitudes[i]) + '\n');
+    }  
+    //document.write(latAvg + ' ' + longAvg + '\n');                                     
+    latAvg /= goodCoords;
+    longAvg /= goodCoords;
+    //document.write(latAvg + ' ' + longAvg);
+    var center = new google.maps.LatLng(latAvg, longAvg, true);
+    return center;
+}
+
+function getPercentage(num, total, dec) {
+	var result = Math.round(((num/total)*100)*Math.pow(10,dec))/Math.pow(10,dec);
+	return result;
+}
 
 function initialize() {
     var marker_array = [];
@@ -126,25 +133,23 @@ function initialize() {
             //show center of the cluster?
             //close on zoom
             if(chilling > 0)
-                content += "Still: " + parseFloat(((chilling/clusterMarkers.length) * 100).toPrecision(4)) + '%<br />';
+                content += "Still: " + parseFloat(getPercentage(chilling, clusterMarkers.length, 2)) + '%<br />';
             if(walking > 0)
-                content += "Walk: " + parseFloat(((walking/clusterMarkers.length) * 100).toPrecision(4)) + '%<br />';
+                content += "Walk: " + parseFloat(getPercentage(walking, clusterMarkers.length, 2)) + '%<br />';
             if(biking > 0)
-                content += "Bike: " + parseFloat(((biking/clusterMarkers.length) * 100).toPrecision(4)) + '%<br />';
+                content += "Bike: " + parseFloat(getPercentage(biking, clusterMarkers.length, 2)) + '%<br />';
             if(driving > 0)
-                content += "Drive: " + parseFloat(((driving/clusterMarkers.length) * 100).toPrecision(4)) + '%<br />';
+                content += "Drive: " + parseFloat(getPercentage(driving, clusterMarkers.length, 2)) + '%<br />';
             
         	
         	// Convert lat/long from cluster object to a usable MVCObject
         	var info = new google.maps.MVCObject;
         	info.set('position', cluster.center_);
-        
-        	var infowindow = new google.maps.InfoWindow();
-        	infowindow.close();
+                 
         	infowindow.setContent(content);
         	infowindow.open(map, info);
-	   });
-        
+        });
+
     }        
 }             
     </script>
