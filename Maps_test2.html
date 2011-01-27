@@ -18,6 +18,7 @@
     var redIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/red-dot.png");
     var greenIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/green-dot.png");
     var purpleIcon = new google.maps.MarkerImage("http://www.google.com/intl/en_us/mapfiles/ms/micons/purple-dot.png");
+    var clusterIcon = new google.maps.MarkerImage("http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png");
 
     var infowindow = new google.maps.InfoWindow();
 
@@ -94,8 +95,31 @@ function initialize() {
             marker_array.push(marker);                    
         }
         //Create the marker clusterer
-        var mcOptions = {'zoomOnClick': false}; 
+        var clusterMarkerOptions = {
+                'icon': clusterIcon
+            };
+        var styles = [{
+        url: 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png',
+        height: 53,
+        width: 52
+      },
+      {
+        url: 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png',
+        height: 53,
+        width: 52
+      },
+      {
+        url: 'http://google-maps-utility-library-v3.googlecode.com/svn/trunk/markerclusterer/images/m1.png',
+        height: 53,
+        width: 52,
+      }]
+   
+        var mcOptions = {
+                'zoomOnClick': false,
+                'styles': styles
+            }; 
         var markerCluster = new MarkerClusterer(map, marker_array, mcOptions);
+        markerCluster.setMaxZoom(15);	
         
        google.maps.event.addListener(markerCluster, 'clusterclick', function(cluster) {
         	var content = "<br />";
